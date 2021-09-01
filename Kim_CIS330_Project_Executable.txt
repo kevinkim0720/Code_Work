@@ -1,0 +1,436 @@
+REM(Kevin Kim)
+
+
+REM ******** Drop Tables ***************
+DROP TABLE FlightCrew;
+DROP TABLE FlightFliers;
+DROP TABLE BoardingPass;
+DROP TABLE Flight;
+DROP TABLE FlightInformation;
+DROP TABLE Bag;
+DROP TABLE Passenger;
+DROP TABLE Seat;
+DROP TABLE Aircraft;
+DROP TABLE Airport;
+DROP TABLE Pilot;
+DROP TABLE FlightAttendant;
+
+
+REM *****Create Tables *****
+CREATE TABLE FlightAttendant(
+	AttendantID VARCHAR(30) PRIMARY KEY,
+	FName VARCHAR(40),
+	LName VARCHAR(40),
+	Email VARCHAR(60),
+	PhoneNum VARCHAR(15));
+
+CREATE TABLE Pilot(
+	PilotID VARCHAR(30) PRIMARY KEY,
+	FName VARCHAR(40),
+	LName VARCHAR(40),
+	Email VARCHAR(40),
+	PhoneNum VARCHAR(15));
+
+CREATE TABLE Airport(
+	AirportID VARCHAR(10) PRIMARY KEY,
+	Name VARCHAR(60),
+	City VARCHAR(40),
+	State VARCHAR(10),
+	Country VARCHAR(20),
+	Hub VARCHAR(3));
+
+CREATE TABLE Aircraft(
+	AircraftID VARCHAR(20) PRIMARY KEY,
+	Type VARCHAR(50),
+	NumofSeats INTEGER);
+
+CREATE TABLE Seat(
+	SeatID VARCHAR(10) PRIMARY KEY,
+	Type VARCHAR(20),
+	FirstClass VARCHAR(3));
+
+CREATE TABLE Passenger(
+	PassengerNum INTEGER PRIMARY KEY,
+	FName VARCHAR(20),
+	LName VARCHAR(20),
+	Street VARCHAR(50),
+	City VARCHAR(30),
+	State VARCHAR(10),
+	Country VARCHAR(20),
+	Zip INTEGER,
+	Email VARCHAR(40),
+	PhoneNum VARCHAR(15));
+
+CREATE TABLE Bag(
+	BagID VARCHAR(10) PRIMARY KEY,
+	Weight INTEGER,
+	PassengerNum INTEGER REFERENCES Passenger(PassengerNum));
+
+CREATE TABLE FlightInformation(
+	InformationID VARCHAR(10) PRIMARY KEY,
+	AircraftID VARCHAR(20) REFERENCES Aircraft(AircraftID),
+	Out_AirportID VARCHAR(20) NOT NULL REFERENCES Airport(AirportID),
+	In_AirportID VARCHAR(20) NOT NULL REFERENCES Airport(AirportID));
+
+CREATE TABLE Flight(
+	FlightID VARCHAR(10) PRIMARY KEY,
+	DepartureDate DATE,
+	DepartureTime VARCHAR(30),
+	ArrivalDate DATE,
+	ArrivalTime VARCHAR(30),
+	InformationID VARCHAR(10) REFERENCES FlightInformation(InformationID));	
+
+CREATE TABLE BoardingPass(
+	PassNum VARCHAR(10) PRIMARY KEY,
+	PassengerNum INTEGER NOT NULL REFERENCES Passenger(PassengerNum),
+	FlightID VARCHAR(10)  NOT NULL REFERENCES Flight(FlightID),
+	SeatID VARCHAR(3) NOT NULL REFERENCES Seat(SeatID));
+
+CREATE TABLE FlightFliers(
+	FlierID VARCHAR(20) PRIMARY KEY,
+	FlightID VARCHAR(10)  NOT NULL REFERENCES Flight(FlightID),
+	PilotID VARCHAR(30) REFERENCES Pilot(PilotID),
+	CoPilotID VARCHAR(30) REFERENCES Pilot(PilotID));
+
+CREATE TABLE FlightCrew(
+	FlierID VARCHAR(20) REFERENCES FlightFliers(FlierID),
+	AttendantID VARCHAR(30) REFERENCES FlightAttendant(AttendantID));
+
+
+
+REM ******** Populate Tables ***************
+INSERT INTO FlightAttendant VALUES('PA-1', 'Veronica', 'Lee', 'veronicalee12@gmail.com', '32-888-6968');
+INSERT INTO FlightAttendant VALUES('PA-2', 'Vanessa', 'Jones', 'VanJones49@yahoo.com', '517-956-8849');
+INSERT INTO FlightAttendant VALUES('PA-3', 'Tyler', 'Garcia', 'ilovedogs@gmail.com', '540-969-5984');
+INSERT INTO FlightAttendant VALUES('PA-4', 'Alex', 'Miller', 'Millerlite3@yahoo.com', '212-999-4848');
+INSERT INTO FlightAttendant VALUES('PA-5', 'Lauren', 'Davis', 'Lauren192@gmail.com', '212-686-9965');
+INSERT INTO FlightAttendant VALUES('PA-6', 'Tiffany', 'Park', 'tiffanypark12@naver.com', '32-485-9968');
+INSERT INTO FlightAttendant VALUES('PA-7', 'John', 'Thomas', 'thomasthetrain@yahoo.com', '210-484-7852');
+INSERT INTO FlightAttendant VALUES('PA-8', 'Sophie', 'Lopez', 'sophie1914@gmail.com', '720-135-1544');
+INSERT INTO FlightAttendant VALUES('PA-9', 'Janice', 'Jackson', 'jjackson99@yahoo.com', '703-485-1232');
+INSERT INTO FlightAttendant VALUES('PA-10', 'Matt', 'White', 'whitehall4ever@hotmail.com', '540-885-6363');
+INSERT INTO FlightAttendant VALUES('PA-11', 'Luke', 'Kim', 'dogwalker19@gmail.com', '210-222-3623');
+INSERT INTO FlightAttendant VALUES('PA-12', 'Spencer', 'Reid', 'Knowitall@gmail.com', '2-9854-9632');
+INSERT INTO FlightAttendant VALUES('PA-13', 'Sabrina', 'Walker', 'sabrinawalker43@yahoo.com', '916-454-6932');
+INSERT INTO FlightAttendant VALUES('PA-14', 'Robbie', 'King', 'iamaking3@hotmail.com', '201-356-8452');
+INSERT INTO FlightAttendant VALUES('PA-15', 'Danny', 'Green', 'greenisthetrend@gmail.com', '757-321-5845');
+INSERT INTO FlightAttendant VALUES('PA-16', 'Joseph', 'Carter', 'jc1963@gmail.com', '750-999-3252');
+INSERT INTO Pilot VALUES('Pil-1', 'Bob', 'Shirley', 'BestPilot1@gmail.com', '333-203-1993');
+INSERT INTO Pilot VALUES('Pil-2', 'Jack', 'Riddles', 'JackR21@gmail.com', '403-222-9438');
+INSERT INTO Pilot VALUES('Pil-3', 'John', 'Evans', 'Johnevans@gmail.com', '540-299-2213');
+INSERT INTO Pilot VALUES('Pil-4', 'Martha', 'Smith', 'Marthas@gmail.com', '502-455-1998');
+INSERT INTO Pilot VALUES('Pil-5', 'Jack', 'Johnson', 'jj1970@gmail.com', '703-032-4833');
+INSERT INTO Pilot VALUES('Pil-6', 'Connor', 'Adams', 'Cadams12@gmail.com', '540-215-9823');
+INSERT INTO Pilot VALUES('Pil-7', 'Joe', 'Kim', 'jokingfilms@naver.com', '244-193-4324');
+INSERT INTO Pilot VALUES('Pil-8', 'Emily', 'Han', 'eharmony@gmail.com', '571-386-2191');
+INSERT INTO Pilot VALUES('Pil-9', 'Christine', 'Long', 'Golongd@gmail.com', '540-776-5893');
+INSERT INTO Pilot VALUES('Pil-10', 'Amanda', 'Washington', 'nationscapital@yahoo.com', '202-378-9932');
+INSERT INTO Pilot VALUES('Pil-11', 'Daniel', 'Hernandez', 'Dan1983@yahoo.com', '222-666-8888');
+INSERT INTO Pilot VALUES('Pil-12', 'Melvin', 'Parker', 'melpark12@msn.net', '804-883-0076');
+INSERT INTO Pilot VALUES('Pil-13', 'Chris', 'Kim', 'chris01kim@naver.com', '703-571-5400');
+INSERT INTO Pilot VALUES('Pil-14', 'Zack', 'Johns', 'lonnjohns@msn.net', '757-577-7577');
+INSERT INTO Pilot VALUES('Pil-15', 'Christian', 'Bale', 'batman74@yahoo.com', '403-299-7405');
+INSERT INTO Airport VALUES('IAD', 'Dulles International Airport', 'Dulles', 'VA', 'USA', 'Y');
+INSERT INTO Airport VALUES('LAX', 'Los Angeles International Airport', 'Los Angeles', 'CA', 'USA', 'Y');
+INSERT INTO Airport VALUES('JFK', 'John F. Kennedy International Airport', 'Queens', 'NY', 'USA', 'Y');
+INSERT INTO Airport VALUES('ICN', 'Incheon International Airport', 'Incheon', NULL, 'South Korea', 'Y');
+INSERT INTO Airport VALUES('DCA', 'Ronald Reagan Washington National Airport', 'Arlington', 'VA', 'USA', 'Y');
+INSERT INTO Airport VALUES('DEN', 'Denver International Airport', 'Denver', 'CO', 'USA', 'Y');
+INSERT INTO Airport VALUES('PEK', 'Beijing Capital International Airport', 'Beijing', NULL, 'China', 'Y');
+INSERT INTO Airport VALUES('SAT', 'San Antonio International Airport', 'San Antonio', 'TX', 'USA', 'N');
+INSERT INTO Airport VALUES('HND', 'Haneda Airport', 'Tokyo', NULL, 'Japan', 'Y');
+INSERT INTO Airport VALUES('OAJ', 'Albert J. Ellis Airport', 'Jacksonville', 'NC', 'USA', 'N');
+INSERT INTO Airport VALUES('CJU', 'Jeju International Airport', 'Jeju-do', NULL, 'South Korea', 'N');
+INSERT INTO Airport VALUES('ITM', 'Osaka International Airport', 'Osaka', NULL, 'Japan', 'Y');
+INSERT INTO Airport VALUES('SMF', 'Sacramento International Airport', 'Sacramento', 'CA', 'USA', 'N');
+INSERT INTO Airport VALUES('SYD', 'Sydney Airport', 'New South Wales', NULL, 'Australia', 'Y');
+INSERT INTO Airport VALUES('SIN', 'Singapore Changi Airport', 'Changi', NULL, 'Singapore', 'Y');
+INSERT INTO Aircraft VALUES('A-1', 'McDonnell Douglas DC-10', 12);
+INSERT INTO Aircraft VALUES('A-2', 'McDonnell Douglas DC-10', 15);
+INSERT INTO Aircraft VALUES('A-3', 'McDonnell Douglas DC-10', 18);
+INSERT INTO Aircraft VALUES('A-4', 'McDonnell Douglas DC-10', 21);
+INSERT INTO Aircraft VALUES('A-5', 'Boeing 757', 12);
+INSERT INTO Aircraft VALUES('A-6', 'Boeing 757', 15);
+INSERT INTO Aircraft VALUES('A-7', 'Boeing 757', 18);
+INSERT INTO Aircraft VALUES('A-8', 'Boeing 757', 21);
+INSERT INTO Aircraft VALUES('A-9', 'Boeing 777', 12);
+INSERT INTO Aircraft VALUES('A-10', 'Boeing 777', 15);
+INSERT INTO Aircraft VALUES('A-11', 'Boeing 777', 18);
+INSERT INTO Aircraft VALUES('A-12', 'Boeing 777', 21);
+INSERT INTO Aircraft VALUES('A-13', 'Airbus A350', 12);
+INSERT INTO Aircraft VALUES('A-14', 'Airbus A350', 15);
+INSERT INTO Aircraft VALUES('A-15', 'Airbus A350', 21);
+INSERT INTO Seat VALUES('1A', 'Window', 'Y');
+INSERT INTO Seat VALUES('2A', 'Window', 'Y');
+INSERT INTO Seat VALUES('3A', 'Window', 'Y');
+INSERT INTO Seat VALUES('4A', 'Window', 'Y');
+INSERT INTO Seat VALUES('5A', 'Window', 'Y');
+INSERT INTO Seat VALUES('6A', 'Window', 'Y');
+INSERT INTO Seat VALUES('7A', 'Window', 'N');
+INSERT INTO Seat VALUES('7B', 'Center', 'N');
+INSERT INTO Seat VALUES('7C', 'Aisle', 'N');
+INSERT INTO Seat VALUES('8A', 'Window', 'N');
+INSERT INTO Seat VALUES('8B', 'Center', 'N');
+INSERT INTO Seat VALUES('8C', 'Aisle', 'N');
+INSERT INTO Seat VALUES('9A', 'Window', 'N');
+INSERT INTO Seat VALUES('9B', 'Center', 'N');
+INSERT INTO Seat VALUES('9C', 'Aisle', 'N');
+INSERT INTO Seat VALUES('10A', 'Window', 'N');
+INSERT INTO Seat VALUES('10B', 'Center', 'N');
+INSERT INTO Seat VALUES('10C', 'Aisle', 'N');
+INSERT INTO Seat VALUES('11A', 'Window', 'N');
+INSERT INTO Seat VALUES('11B', 'Center', 'N');
+INSERT INTO Seat VALUES('11C', 'Aisle', 'N');
+INSERT INTO Passenger VALUES(1, 'Rachel', 'Blackwell', '4820 16th Road N', 'Arlington', 'VA', 'USA', 22207, 'RachelB@yahoo.com', '571-229-0543');
+INSERT INTO Passenger VALUES(2, 'Daniel', 'Bar', '1204 Port Republic Road', 'Harrisonburg', 'VA', 'USA', 22801, 'Danielbar@gmail.com', '540-747-3392');
+INSERT INTO Passenger VALUES(3, 'David', 'Valerie', '2363 Jackson Mill Road', 'Queens', 'NY', 'USA', 11369, 'Valerie93@hotmail.com', '212-944-0211');
+INSERT INTO Passenger VALUES(4, 'Julie', 'Hall', '1720 Tomato Alley', 'Sacramento', 'CA', 'USA', 95818, 'JHall12@gmail.com', '916-773-1245');
+INSERT INTO Passenger VALUES(5, 'Riley', 'Williams', '1219 Edison Drive', 'San Antonio', 'TX', 'USA', 78201, 'rileywilliams3@yahoo.com', '210-575-4403');
+INSERT INTO Passenger VALUES(6, 'James', 'Hope', '61 Pasir Ris Grove', NULL, NULL, 'Singapore', 518215, 'hope4life@gmail.com', '65-3029-4483');
+INSERT INTO Passenger VALUES(7, 'Nathan', 'Park', '594 Guwol il-dong', 'Incheon', NULL, 'South Korea', NULL, 'Npark48@gmail.com', '32-312-3029');
+INSERT INTO Passenger VALUES(8, 'Anna', 'Lane', '202 Hull Street', 'Brooklyn', 'NY', 'USA', 11233, 'Park8392@naver.com', '212-443-6654');
+INSERT INTO Passenger VALUES(9, 'Declan', 'Watson', '4637 Cornish Way', 'Denver', 'CO', 'USA', 80239, 'Lane4us@hotmail.com', '720-333-9894');
+INSERT INTO Passenger VALUES(10, 'Ian', 'Young', '1 Shaaron Court', 'Banksia NSW', NULL, 'Australia', 2216, 'WatsonD3@gmail.com', '2-3888-4321');
+INSERT INTO Passenger VALUES(11, 'Elizabeth', 'Anderson', '61 Pasir Ris Grove', NULL, NULL, 'Singapore', 518215, 'Elizabeth939@gmail.com', '65-1032-8837');
+INSERT INTO Passenger VALUES(12, 'Ruby', 'Alexander', '5 Short Street', 'Banksia NSW', NULL, 'Australia', 2216, 'rubyalex@yahoo.com', '2-4903-9003');
+INSERT INTO Passenger VALUES(13, 'Iris', 'Lee', 'Munhwa-ro 89beon-gil', 'Incheon', NULL, 'South Korea', NULL, 'Lee8392@naver.com', '32-299-4003');
+INSERT INTO Passenger VALUES(14, 'Josh', 'Vick', '1730 Tomato Alley', 'Sacramento', 'CA', 'USA', 95818, 'jvick31@hotmail.com', '916-305-5886');
+INSERT INTO Passenger VALUES(15, 'Tommy', 'Flint', '4630 Cornish Way', 'Denver', 'CO', 'USA', 80239, 'Flintstones43@hotmail.com', '720-311-1104');
+INSERT INTO Passenger VALUES(16, 'Aria', 'Roman', '597 Guwol il-dong', 'Incheon', NULL, 'South Korea', NULL, 'romans123@naver.com', '32-123-4039');
+INSERT INTO Bag VALUES('B-1', 40, 1);
+INSERT INTO Bag VALUES('B-2', 64, 3);
+INSERT INTO Bag VALUES('B-3', 39, 5);
+INSERT INTO Bag VALUES('B-4', 70, 7);
+INSERT INTO Bag VALUES('B-5', 50, 4);
+INSERT INTO Bag VALUES('B-6', 36, 8);
+INSERT INTO Bag VALUES('B-7', 40, 1);
+INSERT INTO Bag VALUES('B-8', 42, 4);
+INSERT INTO Bag VALUES('B-9', 38, 10);
+INSERT INTO Bag VALUES('B-10', 50, 14);
+INSERT INTO Bag VALUES('B-11', 48, 14);
+INSERT INTO Bag VALUES('B-12', 61, 2);
+INSERT INTO Bag VALUES('B-13', 55, 8);
+INSERT INTO Bag VALUES('B-14', 51, 9);
+INSERT INTO Bag VALUES('B-15', 45, 6);
+INSERT INTO FlightInformation VALUES('I-1', 'A-1', 'SAT', 'IAD');
+INSERT INTO FlightInformation VALUES('I-2', 'A-12', 'ITM', 'ICN');
+INSERT INTO FlightInformation VALUES('I-3', 'A-9', 'ICN', 'CJU');
+INSERT INTO FlightInformation VALUES('I-4', 'A-15', 'SIN', 'JFK');
+INSERT INTO FlightInformation VALUES('I-5', 'A-5', 'LAX', 'IAD');
+INSERT INTO FlightInformation VALUES('I-6', 'A-8', 'IAD', 'PEK');
+INSERT INTO FlightInformation VALUES('I-7', 'A-12', 'ICN', 'JFK');
+INSERT INTO FlightInformation VALUES('I-8', 'A-2', 'DEN', 'SAT');
+INSERT INTO FlightInformation VALUES('I-9', 'A-9', 'SYD', 'JFK');
+INSERT INTO FlightInformation VALUES('I-10', 'A-3', 'SMF', 'IAD');
+INSERT INTO FlightInformation VALUES('I-11', 'A-1', 'SAT', 'DEN');
+INSERT INTO FlightInformation VALUES('I-12', 'A-11', 'ICN', 'SIN');
+INSERT INTO FlightInformation VALUES('I-13', 'A-12', 'ICN', 'ITM');
+INSERT INTO FlightInformation VALUES('I-14', 'A-8', 'ITM', 'IAD');
+INSERT INTO FlightInformation VALUES('I-15', 'A-8', 'LAX', 'ICN');
+INSERT INTO FlightInformation VALUES('I-16', 'A-7', 'HND', 'PEK');
+INSERT INTO FlightInformation VALUES('I-17', 'A-1', 'IAD', 'SAT');
+INSERT INTO FlightInformation VALUES('I-18', 'A-8', 'ICN', 'LAX');
+INSERT INTO FlightInformation VALUES('I-19', 'A-12', 'JFK', 'ICN');
+INSERT INTO FlightInformation VALUES('I-20', 'A-9', 'JFK', 'SYD');
+INSERT INTO FlightInformation VALUES('I-21', 'A-9', 'CJU', 'ICN');
+INSERT INTO Flight VALUES('F-1', TO_DATE('12/21/2020', 'MM/DD/YYYY'), '10:00AM', TO_DATE('12/21/2020', 'MM/DD/YYYY'), '3:10PM', 'I-1');
+INSERT INTO Flight VALUES('F-2', TO_DATE('12/17/2020', 'MM/DD/YYYY'), '12:00PM', TO_DATE('12/17/2020', 'MM/DD/YYYY'), '5:30PM', 'I-2');
+INSERT INTO Flight VALUES('F-3', TO_DATE('12/17/2020', 'MM/DD/YYYY'), '8:00PM', TO_DATE('12/17/2020', 'MM/DD/YYYY'), '9:10PM', 'I-3');
+INSERT INTO Flight VALUES('F-4', TO_DATE('12/19/2020', 'MM/DD/YYYY'), '5:00AM', TO_DATE('12/20/2020', 'MM/DD/YYYY'), '1:40AM', 'I-4');
+INSERT INTO Flight VALUES('F-5', TO_DATE('1/20/2021', 'MM/DD/YYYY'), '10:00PM', TO_DATE('1/21/2021', 'MM/DD/YYYY'), '2:45AM', 'I-5');
+INSERT INTO Flight VALUES('F-6', TO_DATE('1/4/2021', 'MM/DD/YYYY'), '5:00AM', TO_DATE('1/5/2021', 'MM/DD/YYYY'), '3:55AM', 'I-6');
+INSERT INTO Flight VALUES('F-7', TO_DATE('1/20/2021', 'MM/DD/YYYY'), '10:00PM', TO_DATE('1/21/2021', 'MM/DD/YYYY'), '12:00PM', 'I-7');
+INSERT INTO Flight VALUES('F-8', TO_DATE('12/21/2020', 'MM/DD/YYYY'), '7:30AM', TO_DATE('12/21/2020', 'MM/DD/YYYY'), '9:40AM', 'I-8');
+INSERT INTO Flight VALUES('F-9', TO_DATE('12/19/2020', 'MM/DD/YYYY'), '3:00PM', TO_DATE('12/20/2020', 'MM/DD/YYYY'), '12:53PM', 'I-9');
+INSERT INTO Flight VALUES('F-10', TO_DATE('12/18/2020', 'MM/DD/YYYY'), '9:30PM', TO_DATE('12/19/2020', 'MM/DD/YYYY'), '3:39AM', 'I-10');
+INSERT INTO Flight VALUES('F-11', TO_DATE('1/10/2021', 'MM/DD/YYYY'), '1:15PM', TO_DATE('1/10/2021', 'MM/DD/YYYY'), '3:35PM', 'I-11');
+INSERT INTO Flight VALUES('F-12', TO_DATE('12/23/2020', 'MM/DD/YYYY'), '9:00AM', TO_DATE('12/23/2020', 'MM/DD/YYYY'), '3:40PM', 'I-12');
+INSERT INTO Flight VALUES('F-13', TO_DATE('1/4/2021', 'MM/DD/YYYY'), '4:00PM', TO_DATE('1/4/2021', 'MM/DD/YYYY'), '10:00PM', 'I-13');
+INSERT INTO Flight VALUES('F-14', TO_DATE('1/20/2021', 'MM/DD/YYYY'), '4:00AM', TO_DATE('1/20/2021', 'MM/DD/YYYY'), '7:00PM', 'I-14');
+INSERT INTO Flight VALUES('F-15', TO_DATE('12/17/2020', 'MM/DD/YYYY'), '5:30AM', TO_DATE('12/17/2020', 'MM/DD/YYYY'), '7:00PM', 'I-15');
+INSERT INTO Flight VALUES('F-16', TO_DATE('12/18/2020', 'MM/DD/YYYY'), '5:15PM', TO_DATE('12/19/2020', 'MM/DD/YYYY'), '4:00AM', 'I-16');
+INSERT INTO Flight VALUES('F-17', TO_DATE('1/31/2021', 'MM/DD/YYYY'), '10:00AM', TO_DATE('1/31/2021', 'MM/DD/YYYY'), '3:10PM', 'I-1');
+INSERT INTO Flight VALUES('F-18', TO_DATE('2/4/2021', 'MM/DD/YYYY'), '5:00AM', TO_DATE('2/5/2021', 'MM/DD/YYYY'), '3:55AM', 'I-6');
+INSERT INTO Flight VALUES('F-19', TO_DATE('3/14/2021', 'MM/DD/YYYY'), '5:15PM', TO_DATE('3/15/2021', 'MM/DD/YYYY'), '4:00AM', 'I-16');
+INSERT INTO Flight VALUES('F-20', TO_DATE('3/21/2021', 'MM/DD/YYYY'), '10:00AM', TO_DATE('3/21/2021', 'MM/DD/YYYY'), '3:10PM', 'I-17');
+INSERT INTO Flight VALUES('F-21', TO_DATE('3/21/2021', 'MM/DD/YYYY'), '5:30PM', TO_DATE('3/21/2021', 'MM/DD/YYYY'), '7:00AM', 'I-18');
+INSERT INTO Flight VALUES('F-22', TO_DATE('2/14/2021', 'MM/DD/YYYY'), '7:00PM', TO_DATE('2/15/2021', 'MM/DD/YYYY'), '9:00PM', 'I-19');
+INSERT INTO Flight VALUES('F-23', TO_DATE('1/7/2021', 'MM/DD/YYYY'), '3:00PM', TO_DATE('1/8/2021', 'MM/DD/YYYY'), '12:53PM', 'I-20');
+INSERT INTO Flight VALUES('F-24', TO_DATE('1/7/2021', 'MM/DD/YYYY'), '8:00AM', TO_DATE('1/7/2021', 'MM/DD/YYYY'), '9:10AM', 'I-21');
+INSERT INTO BoardingPass VALUES('BP-1', 1, 'F-2', '1A');
+INSERT INTO BoardingPass VALUES('BP-2', 1, 'F-3', '7B');
+INSERT INTO BoardingPass VALUES('BP-3', 1, 'F-24', '7B');
+INSERT INTO BoardingPass VALUES('BP-4', 2, 'F-1', '4A');
+INSERT INTO BoardingPass VALUES('BP-5', 2, 'F-20', '4A');
+INSERT INTO BoardingPass VALUES('BP-6', 3, 'F-4', '1A');
+INSERT INTO BoardingPass VALUES('BP-7', 4, 'F-10', '5A');
+INSERT INTO BoardingPass VALUES('BP-8', 4, 'F-6', '7A');
+INSERT INTO BoardingPass VALUES('BP-9', 5, 'F-11', '6A');
+INSERT INTO BoardingPass VALUES('BP-10', 6, 'F-4', '3A');
+INSERT INTO BoardingPass VALUES('BP-11', 7, 'F-13', '11B');
+INSERT INTO BoardingPass VALUES('BP-12', 7, 'F-2', '3A');
+INSERT INTO BoardingPass VALUES('BP-13', 8, 'F-4', '7C');
+INSERT INTO BoardingPass VALUES('BP-14', 9, 'F-8', '9B');
+INSERT INTO BoardingPass VALUES('BP-15', 10, 'F-9', '6A');
+INSERT INTO BoardingPass VALUES('BP-16', 10, 'F-23', '6A');
+INSERT INTO BoardingPass VALUES('BP-17', 11, 'F-4', '10C');
+INSERT INTO BoardingPass VALUES('BP-18', 12, 'F-9', '2A');
+INSERT INTO BoardingPass VALUES('BP-19', 13, 'F-7', '8A');
+INSERT INTO BoardingPass VALUES('BP-20', 13, 'F-22', '7C');
+INSERT INTO BoardingPass VALUES('BP-21', 14, 'F-15', '2A');
+INSERT INTO BoardingPass VALUES('BP-22', 14, 'F-21', '1A');
+INSERT INTO BoardingPass VALUES('BP-23', 15, 'F-8', '8C');
+INSERT INTO BoardingPass VALUES('BP-24', 15, 'F-11', '7B');
+INSERT INTO BoardingPass VALUES('BP-25', 16, 'F-7', '1A');
+INSERT INTO BoardingPass VALUES('BP-26', 16, 'F-22', '2A');
+INSERT INTO FlightFliers VALUES('Fly-1', 'F-1', 'Pil-1', 'Pil-9');
+INSERT INTO FlightFliers VALUES('Fly-2', 'F-2', 'Pil-7', 'Pil-8');
+INSERT INTO FlightFliers VALUES('Fly-3', 'F-3', 'Pil-7', 'Pil-8');
+INSERT INTO FlightFliers VALUES('Fly-4', 'F-4', 'Pil-10', 'Pil-15');
+INSERT INTO FlightFliers VALUES('Fly-5', 'F-5', 'Pil-2', 'Pil-14');
+INSERT INTO FlightFliers VALUES('Fly-6', 'F-6', 'Pil-3', 'Pil-11');
+INSERT INTO FlightFliers VALUES('Fly-7', 'F-7', 'Pil-13', 'Pil-12');
+INSERT INTO FlightFliers VALUES('Fly-8', 'F-8', 'Pil-10', 'Pil-15');
+INSERT INTO FlightFliers VALUES('Fly-9', 'F-9', 'Pil-4', 'Pil-5');
+INSERT INTO FlightFliers VALUES('Fly-10', 'F-10', 'Pil-1', 'Pil-9');
+INSERT INTO FlightFliers VALUES('Fly-11', 'F-11', 'Pil-10', 'Pil-15');
+INSERT INTO FlightFliers VALUES('Fly-12', 'F-12', 'Pil-7', 'Pil-8');
+INSERT INTO FlightFliers VALUES('Fly-13', 'F-13', 'Pil-7', 'Pil-8');
+INSERT INTO FlightFliers VALUES('Fly-14', 'F-14', 'Pil-7', 'Pil-8');
+INSERT INTO FlightFliers VALUES('Fly-15', 'F-15', 'Pil-2', 'Pil-14');
+INSERT INTO FlightFliers VALUES('Fly-16', 'F-16', 'Pil-3', 'Pil-11');
+INSERT INTO FlightFliers VALUES('Fly-17', 'F-17', 'Pil-1', 'Pil-9');
+INSERT INTO FlightFliers VALUES('Fly-18', 'F-18', 'Pil-3', 'Pil-11');
+INSERT INTO FlightFliers VALUES('Fly-19', 'F-19', 'Pil-3', 'Pil-11');
+INSERT INTO FlightFliers VALUES('Fly-20', 'F-20', 'Pil-1', 'Pil-9');
+INSERT INTO FlightFliers VALUES('Fly-21', 'F-21', 'Pil-2', 'Pil-14');
+INSERT INTO FlightFliers VALUES('Fly-22', 'F-22', 'Pil-13', 'Pil-12');
+INSERT INTO FlightFliers VALUES('Fly-23', 'F-23', 'Pil-4', 'Pil-5');
+INSERT INTO FlightFliers VALUES('Fly-24', 'F-24', 'Pil-7', 'Pil-8');
+INSERT INTO FlightCrew VALUES('Fly-1', 'PA-5');
+INSERT INTO FlightCrew VALUES('Fly-2', 'PA-1');
+INSERT INTO FlightCrew VALUES('Fly-2', 'PA-6');
+INSERT INTO FlightCrew VALUES('Fly-3', 'PA-1');
+INSERT INTO FlightCrew VALUES('Fly-3', 'PA-6');
+INSERT INTO FlightCrew VALUES('Fly-4', 'PA-11');
+INSERT INTO FlightCrew VALUES('Fly-4', 'PA-13');
+INSERT INTO FlightCrew VALUES('Fly-5', 'PA-7');
+INSERT INTO FlightCrew VALUES('Fly-6', 'PA-7');
+INSERT INTO FlightCrew VALUES('Fly-6', 'PA-11');
+INSERT INTO FlightCrew VALUES('Fly-7', 'PA-2');
+INSERT INTO FlightCrew VALUES('Fly-8', 'PA-11');
+INSERT INTO FlightCrew VALUES('Fly-9', 'PA-12');
+INSERT INTO FlightCrew VALUES('Fly-10', 'PA-15');
+INSERT INTO FlightCrew VALUES('Fly-11', 'PA-5');
+INSERT INTO FlightCrew VALUES('Fly-12', 'PA-2');
+INSERT INTO FlightCrew VALUES('Fly-12', 'PA-4');
+INSERT INTO FlightCrew VALUES('Fly-13', 'PA-4');
+INSERT INTO FlightCrew VALUES('Fly-14', 'PA-14');
+INSERT INTO FlightCrew VALUES('Fly-15', 'PA-2');
+INSERT INTO FlightCrew VALUES('Fly-16', 'PA-3');
+INSERT INTO FlightCrew VALUES('Fly-17', 'PA-5');
+INSERT INTO FlightCrew VALUES('Fly-18', 'PA-7');
+INSERT INTO FlightCrew VALUES('Fly-18', 'PA-11');
+INSERT INTO FlightCrew VALUES('Fly-19', 'PA-3');
+INSERT INTO FlightCrew VALUES('Fly-19', 'PA-2');
+INSERT INTO FlightCrew VALUES('Fly-20', 'PA-5');
+INSERT INTO FlightCrew VALUES('Fly-21', 'PA-2');
+INSERT INTO FlightCrew VALUES('Fly-22', 'PA-2');
+INSERT INTO FlightCrew VALUES('Fly-23', 'PA-12');
+INSERT INTO FlightCrew VALUES('Fly-24', 'PA-1');
+INSERT INTO FlightCrew VALUES('Fly-24', 'PA-6');
+
+
+Commit Work;
+
+
+
+set echo on
+set linesize 470
+set pagesize 500
+set wrap off
+
+
+REM *********** QUERY 1 ***********
+SELECT f.flightID, COUNT(s.seatID)
+ FROM Seat s, BoardingPass bp, Flight f
+ WHERE s.seatID = bp.seatID AND bp.flightID = f.flightID
+ GROUP BY f.flightID;
+
+REM *********** QUERY 2 ***********
+SELECT type, COUNT(type)
+ FROM seat s
+ WHERE s.seatID IN
+  (SELECT bp.seatID
+    FROM BoardingPass bp, Passenger p
+    WHERE p.passengerNum = bp.passengerNum)
+ GROUP BY type;
+
+REM *********** QUERY 3 ***********
+SELECT fName, lName, weight
+ FROM Passenger p, Bag b
+ WHERE p.passengerNum = b.passengerNum AND weight > 50;
+
+REM *********** QUERY 4 ***********
+SELECT flightID, out_airportID, departureDate, departureTime, numofSeats
+ FROM Flight f, FlightInformation fi, Aircraft ac
+ WHERE f.informationID = fi.informationID AND fi.aircraftID = ac.aircraftID;
+
+REM *********** QUERY 5 ***********
+SELECT f.flightID, COUNT(fa.attendantID)
+ FROM Flight f, FlightFliers ff, FlightCrew fc, FlightAttendant fa
+ WHERE f.flightID = ff.flightID AND ff.flierID = fc.flierID AND fc.attendantID = fa.attendantID AND f.flightID IN
+  (SELECT f.flightID
+    FROM Flight f, FlightInformation fi, Aircraft ac
+    WHERE f.informationID = fi.informationID AND fi.aircraftID = ac.aircraftID AND numofSeats =
+     (SELECT MAX(numofSeats)
+       FROM aircraft))
+ GROUP BY f.flightID
+ HAVING COUNT(fa.attendantID) < 2;
+
+REM *********** QUERY 6 ***********
+SELECT fName, lName, phoneNum
+ FROM FlightAttendant fa
+ WHERE fa.attendantID NOT IN
+  (SELECT fa.attendantID
+   FROM FlightCrew fc, FlightAttendant fa
+   WHERE fc.attendantID = fa.attendantID);
+
+REM *********** QUERY 7 ***********
+SELECT fName, email, s.seatID, type, out_AirportID, in_AirportID
+ FROM Passenger p, BoardingPass bp, seat s, Flight f, FlightInformation fi
+ WHERE p.passengerNum = bp.passengerNum AND bp.seatID = s.seatID AND bp.flightID = f.flightID AND f.informationID = fi.informationID;
+
+REM *********** QUERY 8 ***********
+SELECT pil.pilotID, fName, lName, type, COUNT(type)
+ FROM Aircraft ac, FlightInformation fi, Flight f, FlightFliers ff, Pilot pil
+ WHERE ac.aircraftID = fi.aircraftID AND fi.informationID = f.informationID AND f.flightID = ff.flightID AND (ff.pilotID = pil.pilotID OR ff.copilotID = pil.pilotID)
+ GROUP BY pil.pilotID, fName, lName, type;
+
+REM *********** QUERY 9 ***********
+SELECT fName, lName, phoneNum, arrivalDate, arrivalTime, in_AirportID
+ FROM Pilot pil, FlightFliers ff, Flight f, FlightInformation fi
+ WHERE (pil.pilotID = ff.pilotID OR pil.pilotID = ff.copilotID)  AND f.flightID = ff.flightID  AND f.informationID = fi.informationID AND fi.in_AirportID IN
+  (SELECT ap.airportID
+    FROM Airport ap
+    WHERE UPPER(country) LIKE 'SOUTH KOREA');
+
+REM *********** QUERY 10 ***********
+SELECT f.flightID, SUM(b.weight), COUNT(b.bagID)
+  FROM Flight f, Bag b, Passenger p, BoardingPass bp
+  WHERE f.flightID = bp.flightID AND bp.passengerNum = p.passengerNum AND p.passengerNum = b.passengerNum
+  GROUP BY f.flightID;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

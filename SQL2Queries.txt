@@ -1,0 +1,61 @@
+REM (Kevin Kim)
+set echo on
+set linesize 270
+set pagesize 50
+set wrap off
+select * from nls_session_parameters;
+
+REM Query 8
+SELECT Street, City, State, Garage, Basement
+FROM Property
+WHERE Garage IS NOT NULL AND Basement IS NULL
+ORDER BY Zip;
+
+REM Query 9
+SELECT UPPER(City), MAX(AskPrice) MaxAsk
+FROM Property
+WHERE Garage IS NULL
+GROUP BY City
+ORDER BY MAX(AskPrice) desc;
+
+REM Query 10
+SELECT UPPER(City), MAX(AskPrice) MaxAsk
+FROM Property
+WHERE Garage IS NULL
+GROUP BY City
+HAVING MAX(AskPrice) < 300000
+ORDER BY MAX(AskPrice) desc;
+
+Column AskPrice format $999,999.99
+Column AppValue format $999,999.99
+Column Taxes format $999,999.99
+
+REM Query 11
+SELECT ListNum, AskPrice, AppValue, AppValue*0.025 TAXES
+FROM Property
+ORDER BY ListNum;
+
+Column Lowest format $999,999.99
+Column Highest format $999,999.99
+Column Average format $999,999.99
+
+REM Query 12
+SELECT MAX(AskPrice) Highest, MIN(AppValue) Lowest, AVG(AskPrice) Average
+FROM Property;
+
+REM Query 13
+SELECT ListNum, Street, UPPER(State), AskPrice
+FROM Property
+WHERE (UPPER(State) LIKE 'NC' OR UPPER(State) LIKE 'VA') AND AskPrice < 200000
+ORDER BY AskPrice desc;
+
+REM Query 14
+SELECT COUNT(*)
+FROM Property
+WHERE UPPER(State) LIKE 'NC' AND AppValue > 150000;
+
+REM Query 15
+SELECT 'House For Sale:'||' '||Street||' '||City||' '||UPPER(State)||' '||Zip||' Cost is '||AskPrice HOUSE_INFROMATION
+FROM Property
+WHERE AskPrice > 200000
+ORDER BY AskPrice desc;

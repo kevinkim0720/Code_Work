@@ -1,0 +1,92 @@
+set echo on
+set linesize 270
+set pagesize 50
+set wrap off
+
+REM Query 1
+SELECT PID, Name, SID
+FROM Product
+WHERE Class IS NOT NULL;
+
+REM Query 2
+SELECT Class, COUNT(1)
+FROM Product
+GROUP BY Class;
+
+Column Avg_Price format $9999.99
+
+REM Query 3
+SELECT Class, COUNT(1), AVG(Price) Avg_Price
+FROM Product
+GROUP BY Class
+HAVING COUNT(1) < 3;
+
+REM Query 4
+SELECT SID, Zip, Name
+FROM Supplier
+WHERE Zip IN
+ (SELECT Zip
+  FROM Zip
+  WHERE UPPER(State) LIKE 'VA');
+
+Column Total_Sales format $999999.99
+
+REM Query 5
+SELECT City, State, s.Name, SUM(Price * NumOrdered) Total_Sales
+FROM Zip z, Supplier s, Product p, PurchaseOrder po
+WHERE z.Zip = s.Zip AND s.SID = p.SID  AND po.PID = p.PID AND s.SID LIKE 'S-090'
+GROUP BY City, State, s.Name;
+
+REM Query 6
+SELECT LName, PurDate
+FROM Customer c, PurchaseOrder po
+WHERE c.CID = po.CID(+)
+ORDER BY LName;
+
+REM Query 7
+SELECT SID, Name
+FROM Supplier
+WHERE SID NOT IN
+ (SELECT SID
+ FROM Product);
+
+REM Query 8
+SELECT SID, Name
+FROM Supplier
+WHERE SID IN
+ (SELECT SID
+ FROM Product p
+ WHERE PID NOT IN
+  (SELECT PID
+  FROM PurchaseOrder po
+  WHERE p.PID = po.PID));
+
+REM Query 9
+SELECT OID, PurDate, NumOrdered, SUM(Price * NumOrdered) Total_Sales
+FROM PurchaseOrder po, Product p
+WHERE po.PID = p.PID AND p.SID IN
+ (SELECT SID
+ FROM Supplier
+ WHERE Name LIKE 'Intel' or Name LIKE 'Microsoft')
+GROUP BY OID, PurDate, NumOrdered;
+
+REM Query 10
+SELECT p.PID, p.Name, s.Name, SUM(Price * NumOrdered) Total_Sales
+FROM Product p, Supplier s, PurchaseOrder po
+WHERE p.PID = po.PID AND p.SID = s.SID AND p.PID IN
+ (SELECT PID
+ FROM Product
+ WHERE Class IS NULL)
+GROUP BY p.PID, p.Name, s.Name;
+
+REM Query 11
+SELECT c.CID, SUM(Price * NumOrdered) Total_Sales
+FROM Customer c, Product p, PurchaseOrder po
+WHERE c.CID = po.CID AND p.PID = po.PID
+
+(SELECT MAX(Total_Sales)
+FROM (
+SELECT po.CID, SUM(Price * NumOrdered) Total_Sales
+FROM Customer c, Product p, PurchaseOrder po
+WHERE c.CID = po.CID AND p.PID = po.PID
+GROUP BY po.CID));

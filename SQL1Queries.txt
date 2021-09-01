@@ -1,0 +1,43 @@
+REM (Kevin Kim)
+set echo on
+set linesize 270
+set pagesize 50
+set wrap off
+select * from nls_session_parameters;
+
+/* Query 1 */
+select * 
+from Property;
+
+/* Query 2 */
+select listnum, proptype, listdate, basement
+from Property
+order by listdate;
+
+/* Query 3 */
+select distinct proptype
+from Property;
+
+/* Query 4 */
+select street, city, state, askprice
+from Property
+where askprice < 200000
+order by zip;
+
+/* Query 5 */
+select street, zip, UPPER(state) ST, askprice, appvalue TAXABLE
+from Property
+where appvalue < askprice
+order by zip, askprice desc;
+
+/* Query 6 */
+select street, askprice, listdate, garage
+from Property
+where askprice between 100000 and 199000
+order by askprice;
+
+/* Query 7 */
+select street, city, state, askprice
+from Property
+where garage is not NULL
+order by street;
