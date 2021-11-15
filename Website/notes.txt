@@ -1,0 +1,10 @@
+python has something call JINJA that allows it to code in html
+CDN is content delivery network, load without downloading the files of CSS and JavaScript
+makes the website look nice
+syntax for adding python code
+child classes can change any block elements
+javascript related to bootstrap, bottom of the body tag
+javascript files like images or css that doesn't change go to the static folder
+load a static file
+url_for is a python function, folder name, filename
+{{}} means you are going to write in python
